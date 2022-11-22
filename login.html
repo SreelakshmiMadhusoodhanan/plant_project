@@ -1,0 +1,111 @@
+{% comment %} {% extends 'index.html' %} {% endcomment %}
+{% load static %}
+{% block title %}{% endblock %}
+{% block content %} 
+<head>
+    <meta charset="UTF-8">
+    <title>LogIn and SignUp Page</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'style1.css' %}">
+</head>
+
+<body>
+    <script>
+        setTimeout(function(){
+            if ($('#msg').length>0){
+                $('#msg').remove();
+            }
+        },4000)
+    </script>
+ <div>
+    <a href="{% url 'index' %}" style="color:rgb(255,255,255)" input type="submit" value="home"><b>Home</b></a>
+ </div>
+    <div class="box">     
+        <div class="page">
+            <div class="header">
+                <a id="login" class="active" href="#login">login</a>
+                <a id="signup" href="{% url 'register.html' %}">signup</a>
+            </div>
+            <div id="errorMsg"></div>
+            <div class="content">
+                <form onsubmit ="return unameValidation()  && passwordValidation() " action="{% url 'login' %}" class="login" name="loginForm" onsubmit="return validateLoginForm()" method="POST">
+                    
+                   {% include 'alerts.html' %}
+                    {% csrf_token %}
+                    <input type="text" name="username" id="logName" placeholder="Username" onkeyup='unameValidation(this)' required/>
+                    <span class="error-msg" id="uname"> </span><br>
+                    <input type="password" name="password" id="logPassword" placeholder="Password" onkeyup='passwordValidation(this)' required/>
+                    <span class="error-msg" id="password"></span><br>
+                    {% comment %} <div id="check">
+                        <input type="checkbox" id="remember">
+                        <label for="remember">Remember me</label><br>
+                    </div> {% endcomment %}
+                    {% comment %} <br><br> {% endcomment %}
+                    <input type="submit" value="Login">
+                    <a href="{% url 'password_reset' %}">Forgot Password?</a>
+                    <br>
+                    <a href="{% url 'register.html' %}">Create your account?</a>
+                </form>
+                {% comment %} <form class="signup" name="signupForm" onsubmit="return validateSignupForm()" method="POST">
+                    <input type="email" name="email" id="signEmail" placeholder="Email">
+                    <input type="text" name="name" id="signName" placeholder="Username">
+                    <input type="password" name="password" id="signPassword" placeholder="Password"><br>
+                    <input type="submit" value="SignUp">
+                </form> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="index.js"></script>
+</body>
+
+<script type="text/javascript">
+    
+    function unameValidation(inputTxt){
+       
+       var regx = /^[a-zA-Z]+$/;
+       var textField = document.getElementById("uname");
+   
+       if(inputTxt.value != '' ){
+   
+           if(inputTxt.value.length >= 3){
+   
+               if(inputTxt.value.match(regx)){
+                   textField.textContent = '';
+                   textField.style.color = "green";
+   
+               }else{
+                   textField.textContent = 'only characters allowded';
+                   textField.style.color = "red";
+               }
+           }else{
+               textField.textContent = 'your input mut me more than two chracters';
+               textField.style.color = "red";
+           }
+       }else{
+           textField.textContent = 'your input is empty';
+   
+           textField.style.color = "red";
+       }
+   }
+   function passwordValidation(inputTxt){
+       
+    var regx = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16}$/;
+    var textField = document.getElementById("password");
+
+    if(inputTxt.value != '' ){
+            if(inputTxt.value.match(regx)){
+                textField.textContent = '';
+                textField.style.color = "green";
+
+            }else{
+                textField.textContent = 'Must contain at least one number and one uppercase and lowercase letter and aleast 5 characters';
+                textField.style.color = "red";
+            }
+    }else{
+        textField.textContent = 'your input is empty';
+        textField.style.color = "red";
+    }
+}
+</script>
+{% endblock %} 
